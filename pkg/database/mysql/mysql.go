@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/mrzalr/eatery-hub/internal/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -16,5 +17,15 @@ func New() (*gorm.DB, error) {
 	dbname := os.Getenv("MYSQL_DBNAME")
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, password, host, port, dbname) + "?charset=utf8mb4&parseTime=True&loc=UTC"
-	return gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.AutoMigrate(&models.User{})
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }

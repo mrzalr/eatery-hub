@@ -2,7 +2,7 @@ package models
 
 type Response struct {
 	Status  int         `json:"status"`
-	Message int         `json:"message"`
+	Message string      `json:"message"`
 	Errors  []string    `json:"errors"`
 	Data    interface{} `json:"data"`
 }

@@ -21,6 +21,10 @@ func New(db *gorm.DB) *server {
 }
 
 func (s *server) Run() error {
+	s.MapHandlers()
+	s.App.Use(gin.Recovery())
+	s.App.Use(gin.Logger())
+
 	port := fmt.Sprintf(":%s", os.Getenv("APP_PORT"))
 	return s.App.Run(port)
 }
