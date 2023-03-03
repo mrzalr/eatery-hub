@@ -6,5 +6,5 @@ type Repository interface {
 	Create(user models.User) (models.User, error)
 }
 type Usecase interface {
-	CreateUser(user models.User) (models.UserResponse, error)
+	CreateUser(user models.User) (models.UserWithToken, error)
 }

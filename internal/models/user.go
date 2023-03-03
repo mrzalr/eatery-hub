@@ -12,16 +12,16 @@ import (
 
 type User struct {
 	gorm.Model
-	ID          uuid.UUID `json:"id"`
-	FirstName   string    `json:"firstname" validate:"required" gorm:"type:varchar(255);not null"`
-	LastName    string    `json:"lastname" validate:"required" gorm:"type:varchar(255);not null"`
-	Email       string    `json:"email" validate:"required,email" gorm:"type:varchar(255);unique;not null"`
-	Password    string    `json:"password" validate:"required,min=6" gorm:"type:varchar(255);not null"`
-	PhoneNumber string    `json:"phone_number" validate:"required,e164" gorm:"type:varchar(255);unique;not null"`
-	Address     string    `json:"address"`
-	DOB         time.Time `json:"date_of_birth"`
-	PhotoUrl    string    `json:"photo_url"`
-	IsAdmin     string    `json:"is_admin"`
+	ID          uuid.UUID  `json:"id"`
+	FirstName   string     `json:"firstname" validate:"required" gorm:"type:varchar(255);not null"`
+	LastName    string     `json:"lastname" validate:"required" gorm:"type:varchar(255);not null"`
+	Email       string     `json:"email" validate:"required,email" gorm:"type:varchar(255);unique;not null"`
+	Password    string     `json:"password" validate:"required,min=6" gorm:"type:varchar(255);not null"`
+	PhoneNumber string     `json:"phone_number" validate:"required,e164" gorm:"type:varchar(255);unique;not null"`
+	Address     string     `json:"address"`
+	DOB         *time.Time `json:"date_of_birth"`
+	PhotoUrl    string     `json:"photo_url"`
+	IsAdmin     string     `json:"is_admin"`
 }
 
 func (u *User) BeforeCreate(db *gorm.DB) error {
@@ -55,15 +55,14 @@ func (u *User) CompareHashPassword(password string) error {
 }
 
 type UserResponse struct {
-	ID          uuid.UUID `json:"id"`
-	FirstName   string    `json:"firstname" validate:"required"`
-	LastName    string    `json:"lastname" validate:"required"`
-	Email       string    `json:"email" validate:"required"`
-	PhoneNumber string    `json:"phone_number" validate:"required"`
-	Address     string    `json:"address"`
-	DOB         time.Time `json:"date_of_birth"`
-	PhotoUrl    string    `json:"photo_url"`
-	CreatedAt   time.Time `json:"created_at"`
+	ID          uuid.UUID  `json:"id"`
+	FirstName   string     `json:"firstname" validate:"required"`
+	LastName    string     `json:"lastname" validate:"required"`
+	Email       string     `json:"email" validate:"required"`
+	PhoneNumber string     `json:"phone_number" validate:"required"`
+	Address     string     `json:"address"`
+	DOB         *time.Time `json:"date_of_birth"`
+	PhotoUrl    string     `json:"photo_url"`
 }
 
 func (u *UserResponse) ParseFromUser(user User) {
@@ -75,5 +74,9 @@ func (u *UserResponse) ParseFromUser(user User) {
 	u.Address = user.Address
 	u.DOB = user.DOB
 	u.PhotoUrl = user.PhotoUrl
-	u.CreatedAt = user.CreatedAt
+}
+
+type UserWithToken struct {
+	UserResponse
+	Token string `json:"token"`
 }

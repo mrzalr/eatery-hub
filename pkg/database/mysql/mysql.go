@@ -22,7 +22,7 @@ func New() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	err = db.AutoMigrate(&models.User{})
+	err = db.AutoMigrate(&models.User{}, &models.UserVerification{})
 	if err != nil {
 		return nil, err
 	}
